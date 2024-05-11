@@ -83,6 +83,13 @@ def about(request):
 def contact(request):
     return render(request,'contact.html')
 
+def sendContact(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        message = request.POST.get("message")
+    return redirect(contact)
+
 def resource(request):
     resourceObjs = model.resource.objects.all()
     context = {
@@ -107,22 +114,46 @@ def saveResource(request):
         img = None
         if request.FILES.get('res-img'):
             img = request.FILES['res-img']
+        else:
+            img = "resource-img/resource-default-image.png"
+        link = None
+        if request.POST.get('res-link'):
+            link = request.POST.get('res-link')
         file = None
         if request.FILES.get('res-file'):
             file = request.FILES['res-file']
         isPublished = 0
-        link = ""
-        if request.POST.get('res-link'):
-            link = request.POST.get('res-link')
 
         try:
             if model.resource.objects.filter(title=title).exists():
                 messages.error(request,'Please enter unique title because it will already taken')
             else:
-                resourceObj = model.resource(title=title,description=description,img=img,file=file,isPublished=isPublished,link=link,readerName=model.reader.objects.get(id=request.session['userid']))
-                resourceObj.save()
-                if resourceObj:
-                    return redirect(resource)
+                if link == None:
+                    print("in file")
+                    resourceObj = model.resource(title=title, description=description, img=img, resfile=file,
+                                                 isPublished=isPublished,
+                                                 readerName=model.reader.objects.get(id=request.session['userid']))
+                    resourceObj.save()
+                    if resourceObj:
+                        return redirect(resource)
+                elif file == None:
+                    print("in link")
+                    resourceObj = model.resource(title=title, description=description, img=img,
+                                                 isPublished=isPublished, link=link,
+                                                 readerName=model.reader.objects.get(id=request.session['userid']))
+                    resourceObj.save()
+                    if resourceObj:
+                        return redirect(resource)
+                elif file != None and link != None:
+                    print("in file and link")
+                    resourceObj = model.resource(title=title, description=description, img=img, resfile=file,
+                                                 isPublished=isPublished, link=link,
+                                                 readerName=model.reader.objects.get(id=request.session['userid']))
+                    resourceObj.save()
+                    if resourceObj:
+                        return redirect(resource)
+                else:
+                    messages.error(request,'Please enter link or file')
         except Exception as e:
             print(e)
             messages.error(request,'Something went wrong')
@@ -130,7 +161,60 @@ def saveResource(request):
 
 def editResource(request,id):
     resourceObj = model.resource.objects.get(id=id)
+    print(resourceObj.resfile)
     context = {
         "resource" : resourceObj
     }
+    if request.method == "POST":
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+        img = None
+        if request.FILES.get('res-img'):
+            img = request.FILES['res-img']
+        else:
+            img =  resourceObj.img
+        link = None
+        if request.POST.get('res-link'):
+            link = request.POST.get('res-link')
+        else:
+            if resourceObj.link:
+                link = resourceObj.link
+        file = None
+        if request.FILES.get('res-file'):
+            file = request.FILES['res-file']
+        else:
+            if resourceObj.resfile:
+                file = resourceObj.resfile
+
+        try:
+            if link == None:
+                print("in file")
+                resourceObj2 = model.resource.objects.filter(id=id).update(title=title, description=description, img=img, resfile=file,readerName=model.reader.objects.get(id=request.session['userid']))
+                if resourceObj2:
+                    return redirect(resource)
+            elif file == None:
+                print("in link")
+                resourceObj2 = model.resource.objects.filter(id=id).update(title=title, description=description, img=img, link=link,
+                                             readerName=model.reader.objects.get(id=request.session['userid']))
+                if resourceObj2:
+                    return redirect(resource)
+            elif file != None and link != None:
+                print("in file and link")
+                resourceObj2 = model.resource.objects.filter(id=id).update(title=title, description=description, img=img, resfile=file,link=link,
+                                             readerName=model.reader.objects.get(id=request.session['userid']))
+                if resourceObj2:
+                    return redirect(resource)
+            else:
+                messages.error(request,'Please enter link or file')
+        except Exception as e:
+            print(e)
+            messages.error(request,'Something went wrong')
     return render(request,'edit-resource.html',context)
+
+
+def user_resources(request):
+    resourceObjs = model.resource.objects.filter(readerName=model.reader.objects.get(id=request.session.get('userid')))
+    context = {
+        "user-resource" : resourceObjs
+    }
+    return render(request,'user-resource-setting.html',context)

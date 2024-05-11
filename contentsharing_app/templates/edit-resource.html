@@ -78,7 +78,7 @@ Update Resource
 </div>
     {% endfor %}
 {% endif %}
-            <form action="{% url 'save-resource' %}" method="POST" enctype="multipart/form-data">
+            <form action="/edit/resource/{{ resource.id }}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="mb-4">
                     <label for="title" class="block text-gray-700 font-bold mb-2">Title</label>
@@ -88,13 +88,14 @@ Update Resource
                     <label for="description" class="block text-gray-700 font-bold mb-2">Description</label>
                     <textarea id="description" name="description" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" placeholder="Enter description">{{ resource.description }}</textarea>
                 </div>
+                 {% if resource.img != None %}
                 <div class="flex items-center space-x-6">
             <div class="shrink-0">
               <img id='preview_img' class="h-16 w-16 object-cover rectangled-full" src="{{ resource.img.url }}" alt="empty photo" /> <!-- image is taken from internet named pngtree website -->
             </div>
             <label class="block">
               <span class="sr-only">Choose Resource Image(optional)</span>
-              <input type="file" src="{{ resource.file }}" name="res-img" onchange="loadFile(event)" class="block w-full text-sm text-slate-500
+              <input type="file" src="{{ resource.file }}" name="res-img" onchange="loadFile2(event)" class="block w-full text-sm text-slate-500
                 file:mr-4 file:py-2 file:px-4
                 file:rectangled-full file:border-0
                 file:text-sm file:font-semibold
@@ -103,40 +104,56 @@ Update Resource
               "/>
             </label>
           </div>
+                {% else %}
+                 <div class="flex items-center space-x-6">
+            <div class="shrink-0">
+              <img id='preview_img2' class="h-16 w-16 object-cover rectangled-full" src="https://png.pngtree.com/png-vector/20190330/ourmid/pngtree-img-file-document-icon-png-image_892886.jpg" alt="empty photo" /> <!-- image is taken from internet named pngtree website -->
+            </div>
+            <label class="block">
+              <span class="sr-only">Choose Resource Image(optional)</span>
+              <input type="file" name="res-img" onchange="loadFile(event)" class="block w-full text-sm text-slate-500
+                file:mr-4 file:py-2 file:px-4
+                file:rectangled-full file:border-0
+                file:text-sm file:font-semibold
+                file:bg-violet-50 file:text-violet-700
+                hover:file:bg-violet-100
+              "/>
+            </label>
+          </div>
+                {% endif %}
                 <div class="mt-4"></div>
-                {% if resource.link != "" %}
+                {% if resource.link != None %}
                 <div class="mb-4">
                     <label for="link" class="block text-gray-700 font-bold mb-2">Link</label>
                     <input type="text" id="link" value="{{ resource.link }}" name="res-link" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" placeholder="Enter link">
                 </div>
                 {% endif %}
-                <div class="text-center text-bold text-lg">Or</div>
-                {% if resource.file.url != "" %}
+                {% if resource.resfile != None %}
                <div class="flex justify-center items-center">
         <div class="bg-white p-8 rounded-lg shadow-lg">
             <label for="file" class="block text-lg font-bold mb-4">Upload PDF, DOCX, or other text format files</label>
             <div class="flex items-center justify-center space-x-4">
-                <input type="file" src="{{ resource.file }}" name="res-file" id="file" class="hidden" accept=".pdf,.docx,.txt">
+                <input type="file" name="res-file" id="file" class="hidden" accept=".pdf,.docx,.txt">
                 <label for="file" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md cursor-pointer">Browse</label>
                 <div id="drop-area" class="border-dashed border-2 border-gray-300 p-8 rounded-md text-center cursor-pointer">
                     <p class="text-gray-500">Drag & Drop files here</p>
                 </div>
             </div>
-            {% endif %}
             <p id="file-info" class="text-sm mt-4"></p>
-        </div>
-    </div>
-                <div class="mt-4"></div>
+            {% endif %}
+        <div class="mt-4"></div>
                 <div class="flex justify-end">
                     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Update</button>
                 </div>
+        </div>
+    </div>
             </form>
         </div>
     </div>
 
     <!-- Include JavaScript for file upload functionality -->
     <script>
-    //file upload
+      //file upload
         const fileInput = document.getElementById('file');
         const dropArea = document.getElementById('drop-area');
         const fileInfo = document.getElementById('file-info');
@@ -176,7 +193,7 @@ Update Resource
         var loadFile = function(event) {
 
             var input = event.target;
-            var file = {{ resource.file.url }};
+            var file = input.files[0];
             var type = file.type;
 
            var output = document.getElementById('preview_img');
@@ -185,6 +202,22 @@ Update Resource
             output.src = URL.createObjectURL(event.target.files[0]);
             output.onload = function() {
                 URL.revokeObjectURL(output.src) // free memory
+            }
+        };
+
+        //image upload
+        var loadFile2 = function(event) {
+
+            var input2 = event.target;
+            var file2 = input2.files[0];
+            var type2 = file2.type;
+
+           var output2 = document.getElementById('preview_img2');
+
+
+            output2.src = URL.createObjectURL(event.target.files[0]);
+            output2.onload = function() {
+                URL.revokeObjectURL(output2.src) // free memory
             }
         };
     </script>
