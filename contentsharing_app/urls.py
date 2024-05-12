@@ -17,4 +17,8 @@ urlpatterns = [
     path('create/resource',view.createResource,name="create-resource"),
     path('save/resource',view.saveResource,name="save-resource"),
     path('edit/resource/<int:id>',view.editResource,name="edit-resource"),
+    path('user/resources/get',view.user_resources,name="user_resources"),
+    path('user/resource/delete/<int:id>',view.user_resource_delete,name="user_resource_delete"),
+    path('user/resource/publish/<int:id>',view.user_resource_publish_request,name="user_resource_publish"),
+    path('user/resource/unpublish/<int:id>',view.user_resource_unpublish_request,name="user_resource_unpublish_request")
 ]

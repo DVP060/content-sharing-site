@@ -91,7 +91,7 @@ def sendContact(request):
     return redirect(contact)
 
 def resource(request):
-    resourceObjs = model.resource.objects.all()
+    resourceObjs = model.resource.objects.filter(isPublished=True)
     context = {
         "resources": resourceObjs
     }
@@ -135,7 +135,8 @@ def saveResource(request):
                                                  readerName=model.reader.objects.get(id=request.session['userid']))
                     resourceObj.save()
                     if resourceObj:
-                        return redirect(resource)
+                        messages.success(request,'Resource created successfully')
+                        return redirect(user_resources)
                 elif file == None:
                     print("in link")
                     resourceObj = model.resource(title=title, description=description, img=img,
@@ -143,7 +144,8 @@ def saveResource(request):
                                                  readerName=model.reader.objects.get(id=request.session['userid']))
                     resourceObj.save()
                     if resourceObj:
-                        return redirect(resource)
+                        messages.success(request, 'Resource created successfully')
+                        return redirect(user_resources)
                 elif file != None and link != None:
                     print("in file and link")
                     resourceObj = model.resource(title=title, description=description, img=img, resfile=file,
@@ -151,7 +153,8 @@ def saveResource(request):
                                                  readerName=model.reader.objects.get(id=request.session['userid']))
                     resourceObj.save()
                     if resourceObj:
-                        return redirect(resource)
+                        messages.success(request, 'Resource created successfully')
+                        return redirect(user_resources)
                 else:
                     messages.error(request,'Please enter link or file')
         except Exception as e:
@@ -215,6 +218,34 @@ def editResource(request,id):
 def user_resources(request):
     resourceObjs = model.resource.objects.filter(readerName=model.reader.objects.get(id=request.session.get('userid')))
     context = {
-        "user-resource" : resourceObjs
+        "user_resources" : resourceObjs
     }
     return render(request,'user-resource-setting.html',context)
+
+def user_resource_delete(request,id):
+    resourceObj = model.resource.objects.filter(readerName=model.reader.objects.get(id=request.session.get('userid')),id=id)
+    deleteObj = resourceObj.delete()
+    if deleteObj:
+        messages.info(request,'Resource Deleted Successfully')
+    else:
+        messages.error(request,'Something went wrong!')
+    return render(request,'user-resource-setting.html')
+
+import datetime
+
+def user_resource_publish_request(request,id):
+    resourceObj = model.resource.objects.filter(readerName=model.reader.objects.get(id=request.session.get('userid')),id=id).update(isPublished = True)
+    if resourceObj:
+        messages.info(request,'Resource is published at '+str(datetime.datetime.now()))
+        return redirect(user_resources)
+    messages.error(request,'Something went wrong')
+    return redirect(user_resources)
+
+def user_resource_unpublish_request(request,id):
+    resourceObj = model.resource.objects.filter(readerName=model.reader.objects.get(id=request.session.get('userid')),
+                                                id=id).update(isPublished=False)
+    if resourceObj:
+        messages.info(request, 'Resource is unpublished at ' + str(datetime.datetime.now()))
+        return redirect(user_resources)
+    messages.error(request, 'Something went wrong')
+    return redirect(user_resources)

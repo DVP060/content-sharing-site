@@ -75,30 +75,40 @@ Read Resource
         <!-- Content Section -->
         <div class="mb-8">
             <h2 class="text-2xl font-bold mb-4">{{ resource.title }}</h2>
-            <p class="text-gray-700 mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae felis id orci fringilla lacinia.</p>
+            <p class="text-gray-700 mb-4">{{ resource.description }}</p>
         </div>
-            <h2 class="text-2xl font-bold mb-4">What is Abstraction?</h2>
-            <p class="text-gray-700 mb-4">
-                Abstraction in Tailwind CSS refers to the practice of using utility classes to style elements without worrying about the underlying CSS implementation.
-            </p>
-            <p class="text-gray-700 mb-4">
-                Instead of writing custom CSS for each element, Tailwind CSS provides a set of predefined utility classes that can be combined to achieve desired styles.
-            </p>
-            <p class="text-gray-700 mb-4">
-                This allows developers to focus on writing HTML markup and applying utility classes, resulting in cleaner and more maintainable code.
-            </p>
-            <h2 class="text-xl font-bold mb-4">Introduction</h2>
-            <p class="text-gray-700 mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae felis id orci fringilla lacinia. Curabitur condimentum ligula id lectus luctus, eu suscipit tortor dictum. Nullam gravida quam ut massa fermentum congue. Sed consectetur feugiat urna, eget viverra massa condimentum sit amet.</p>
-            <p class="text-gray-700 mb-4">Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis feugiat elit non velit lobortis, non sollicitudin ipsum commodo. Proin accumsan pretium mauris, in placerat elit vestibulum sit amet. Sed vel placerat nulla, id aliquam nisi. Maecenas vitae ligula et velit tempor laoreet at sit amet odio.</p>
-            <h2 class="text-xl font-bold mb-4">Main Content</h2>
-            <p class="text-gray-700 mb-4">Suspendisse potenti. In efficitur odio quis luctus ullamcorper. Mauris at velit a nulla posuere semper. Proin elementum lorem in nisi blandit, nec pharetra lacus blandit. Donec auctor eleifend ante ut ullamcorper. Ut convallis nisi nec mauris iaculis, in hendrerit quam feugiat. Nulla facilisi.</p>
-            <p class="text-gray-700 mb-4">Praesent sed odio id libero feugiat auctor. Fusce ac lorem eget enim suscipit venenatis. Vivamus ac sapien nec eros pellentesque faucibus. Quisque lobortis viverra ligula, eget pharetra ex aliquet nec. Fusce tincidunt auctor velit, vitae dictum odio lacinia id.</p>
+<!--            <h2 class="text-2xl font-bold mb-4">What is Abstraction?</h2>-->
+<!--            <p class="text-gray-700 mb-4">-->
+<!--                Abstraction in Tailwind CSS refers to the practice of using utility classes to style elements without worrying about the underlying CSS implementation.-->
+<!--            </p>-->
+<!--            <p class="text-gray-700 mb-4">-->
+<!--                Instead of writing custom CSS for each element, Tailwind CSS provides a set of predefined utility classes that can be combined to achieve desired styles.-->
+<!--            </p>-->
+<!--            <p class="text-gray-700 mb-4">-->
+<!--                This allows developers to focus on writing HTML markup and applying utility classes, resulting in cleaner and more maintainable code.-->
+<!--            </p>-->
+<!--            <h2 class="text-xl font-bold mb-4">Introduction</h2>-->
+<!--            <p class="text-gray-700 mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae felis id orci fringilla lacinia. Curabitur condimentum ligula id lectus luctus, eu suscipit tortor dictum. Nullam gravida quam ut massa fermentum congue. Sed consectetur feugiat urna, eget viverra massa condimentum sit amet.</p>-->
+<!--            <p class="text-gray-700 mb-4">Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis feugiat elit non velit lobortis, non sollicitudin ipsum commodo. Proin accumsan pretium mauris, in placerat elit vestibulum sit amet. Sed vel placerat nulla, id aliquam nisi. Maecenas vitae ligula et velit tempor laoreet at sit amet odio.</p>-->
+<!--            <h2 class="text-xl font-bold mb-4">Main Content</h2>-->
+<!--            <p class="text-gray-700 mb-4">Suspendisse potenti. In efficitur odio quis luctus ullamcorper. Mauris at velit a nulla posuere semper. Proin elementum lorem in nisi blandit, nec pharetra lacus blandit. Donec auctor eleifend ante ut ullamcorper. Ut convallis nisi nec mauris iaculis, in hendrerit quam feugiat. Nulla facilisi.</p>-->
+<!--            <p class="text-gray-700 mb-4">Praesent sed odio id libero feugiat auctor. Fusce ac lorem eget enim suscipit venenatis. Vivamus ac sapien nec eros pellentesque faucibus. Quisque lobortis viverra ligula, eget pharetra ex aliquet nec. Fusce tincidunt auctor velit, vitae dictum odio lacinia id.</p>-->
 
 
         <!-- Like Button -->
+        {% if resource.resfile %}
+        <p class="text-gray-700 mb-4">If you want to download resource file click below button,</p>
         <div>
-            <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Like</button>
+            <a href="/media/{{ resource.resfile }}" download class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Download Resource File</a>
         </div>
+        {% endif %}
+        <div class="mt-4"></div>
+        {% if resource.link %}
+        <p class="text-gray-700 mb-4">If you want to visit creators website,</p>
+        <div>
+            <a href="#" class="text-blue text-underline">Visit Website</a>
+        </div>
+        {% endif %}
 
       <br>
 
@@ -121,7 +131,7 @@ Read Resource
             <div class="flex justify-between items-center">
                 <div>
                     <p class="text-gray-700 font-bold">Best regards,</p>
-                    <p class="text-gray-600">Your Name</p>
+                    <p class="text-gray-600">{{ resource.readerName }}</p>
                 </div>
                 <div class="text-right">
                     <p class="text-gray-600">Company Name</p>

@@ -1,0 +1,283 @@
+{% extends 'main.html' %}
+
+{% load static %}
+
+{% block title %}
+Your Resources
+{% endblock %}
+
+{% block body %}
+{% block navbar %}
+<nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
+  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+  <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse" type="button" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" aria-controls="drawer-navigation">
+      <img src="{% static 'logo.png' %}" class="h-20" alt="KnowYResource Logo">
+  </a>
+  <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+      <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"><a href="{% url 'start' %}" style="text-decoration:none;">Getting Started</a></button>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"><a href="#" style="text-decoration:none;">{{ request.session.username | cut:"_"}}</a></button>
+      <button data-collapse-toggle="navbar-sticky" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-sticky" aria-expanded="false">
+        <span class="sr-only">Open main menu</span>
+        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+        </svg>
+    </button>
+  </div>
+  <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
+    <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+      <li>
+        <a href="/" class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">Home</a>
+      </li>
+      <li>
+        <a href="{% url 'about' %}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">About</a>
+      </li>
+      <li>
+        <a href="{% url 'resource' %}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Resources</a>
+      </li>
+        <li>
+        <a href="{% url 'create-resource' %}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Create Resource</a>
+      </li>
+      <li>
+        <a href="{% url 'contact' %}" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Contact</a>
+      </li>
+    </ul>
+  </div>
+  </div>
+</nav>
+{% endblock %}
+<div class="mt-20"></div>
+<br>
+ <header class="bg-gray-800 text-white py-4">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold">Your created resources</h1>
+        </div>
+    </header>
+<div class="mt-4"></div>
+  <div class="max-w-xl mx-auto">
+      {% if messages %}
+{% for message in messages %}
+    <div id="alert-1" class="flex items-center p-4 mb-4 text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+  <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+  </svg>
+  <span class="sr-only">Info</span>
+  <div class="ms-3 text-sm font-medium">
+    {{ message }}.
+  </div>
+    <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-blue-50 text-blue-500 rounded-lg focus:ring-2 focus:ring-blue-400 p-1.5 hover:bg-blue-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-blue-400 dark:hover:bg-gray-700" data-dismiss-target="#alert-1" aria-label="Close">
+      <span class="sr-only">Close</span>
+      <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+      </svg>
+  </button>
+</div>
+    {% endfor %}
+{% endif %}
+        <ul>
+             {% for user_resource in user_resources %}
+            <li class="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0 md:space-x-4 mb-4">
+                <!-- Counter (visible on small screens) -->
+                <span class="text-gray-500 md:hidden">#{{ forloop.counter }}</span>
+                 <!-- Counter (visible on large screens) -->
+                <span class="text-gray-500 hidden md:block">#{{ forloop.counter }}</span>
+                <!-- Left side: Image, Title, and Status -->
+                <div class="flex flex-col md:flex-row items-center md:items-start space-y-2 md:space-y-0 md:space-x-4">
+                    <!-- Small image -->
+                    <img src="/media/{{ user_resource.img }}" alt="Image" class="w-12 h-12 rounded-full">
+                    <!-- Clickable title (ellipsis on small devices) -->
+                    <a href="/get/resource/{{ user_resource.id }}" class="text-blue-500 hover:underline md:whitespace-nowrap md:max-w-xs overflow-hidden md:text-left">
+                        {{ user_resource.title }}
+                    </a>
+                    <!-- Status indicator -->
+                    {% if user_resource.isPublished == True %}
+                    <span class="px-2 py-1 text-xs bg-green-200 text-green-800 rounded-full">Published</span>
+                    {% else %}
+                    <span class="px-2 py-1 text-xs bg-yellow-200 text-yellow-800 rounded-full">Not Publish</span>
+                    {% endif %}
+                </div>
+                <!-- Right side: Operations -->
+                <div class="flex items-center justify-center space-y-2 md:space-y-0 md:space-x-2">
+                    <!-- Update button -->
+                    <a href="/edit/resource/{{ user_resource.id }}" class="text-sm text-gray-500 hover:text-gray-700 focus:outline-none">
+                        Update
+                    </a>
+                    <!-- Add space between buttons on small devices -->
+                    <span class="md:hidden inline-block w-2"></span>
+                    <!-- Delete button (disabled if published) -->
+<!--                    <button class="text-sm text-red-500 hover:text-red-700 focus:outline-none-->
+<!--                                  {% if item.published %} opacity-50 cursor-not-allowed {% endif %}"-->
+<!--                            {% if item.published %} disabled {% endif %}>-->
+<!--                        Delete-->
+<!--                    </button>-->
+                    <button data-modal-target="delete-modal" data-modal-toggle="delete-modal" class="text-sm text-red-500 hover:text-red-700 focus:outline-none block text-red bg-white hover:bg-white-700 focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800" type="button">
+  Delete
+</button>
+                    <!-- Add space between buttons on small devices -->
+                    <span class="md:hidden inline-block w-2"></span>
+                    <!-- Publish button -->
+                    {% if user_resource.isPublished == True %}
+                    <button data-modal-target="unpublish-modal" data-modal-toggle="unpublish-modal" class="text-sm text-green-500 hover:text-green-700 focus:outline-none block text-green bg-white hover:bg-white-700 focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800" type="button">
+  Unpublish
+</button>
+                    {% else %}
+<!--                    <button class="text-sm text-green-500 hover:text-green-700 focus:outline-none">-->
+<!--                        Publish-->
+<!--                    </button>-->
+                     <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="text-sm text-green-500 hover:text-green-700 focus:outline-none block text-green bg-white hover:bg-white-700 focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800" type="button">
+  Publish
+</button>
+                    {% endif %}
+                </div>
+            </li>
+
+            <!--publish modal-->
+            <!-- Main modal -->
+<div id="default-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    Do you want to Publish this Resource
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-4 md:p-5 space-y-4">
+                <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                    {{ user_resource.title }} is resource named have to publish and it is about {{ user_resource.description }}. This resource is created at {{ user_resource.timestamp }}
+                </p>
+            </div>
+            <!-- Modal footer -->
+            <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                <a href="/user/resource/publish/{{ user_resource.id }}" data-modal-hide="default-modal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Publish</a>
+                <button data-modal-hide="default-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <!--unpublish modal-->
+            <!-- Main modal -->
+<div id="unpublish-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    Do you want to Publish this Resource
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="unpublish-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-4 md:p-5 space-y-4">
+                <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                    {{ user_resource.title }} is resource named have to publish and it is about {{ user_resource.description }}. This resource is created at {{ user_resource.timestamp }}
+                </p>
+            </div>
+            <!-- Modal footer -->
+            <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                <a href="/user/resource/unpublish/{{ user_resource.id }}" data-modal-hide="unpublish-modal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Unpublish</a>
+                <button data-modal-hide="unpublish-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--delete modal-->
+     <!-- Main modal -->
+<div id="delete-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    Do you want to Delete this Resource
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="delete-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-4 md:p-5 space-y-4">
+                <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                    {{ user_resource.title }} is resource named have to delete and it is about {{ user_resource.description }}. This resource is created at {{ user_resource.timestamp }}
+                </p>
+            </div>
+            <!-- Modal footer -->
+            <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+               <a href="/user/resource/delete/{{ user_resource.id }}" data-modal-hide="delete-modal" type="button" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-blue-800">Delete</a>
+                <button data-modal-hide="delete-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+            {% endfor %}
+        </ul>
+
+
+
+<!--            &lt;!&ndash; Example list items &ndash;&gt;-->
+<!--            {% if user_resources %}-->
+<!--            {% for user_resource in user_resources %}-->
+<!--            <li class="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0 md:space-x-4 mb-4">-->
+<!--                &lt;!&ndash; Counter (visible on small screens) &ndash;&gt;-->
+<!--                <span class="text-gray-500 md:hidden">#{{ forloop.counter }}</span>-->
+<!--                &lt;!&ndash; Counter (visible on large screens) &ndash;&gt;-->
+<!--                <span class="text-gray-500 hidden md:block">#{{ forloop.counter }}</span>-->
+<!--                &lt;!&ndash; Left side: Image, Title, and Status &ndash;&gt;-->
+<!--                <div class="flex items-center space-x-4">-->
+<!--                    &lt;!&ndash; Small image &ndash;&gt;-->
+<!--                    <img src="/media/{{ user_resource.img }}" alt="Image" class="w-12 h-12 rounded-full">-->
+<!--                    &lt;!&ndash; Clickable title &ndash;&gt;-->
+<!--                    <a href="#" class="text-blue-500 hover:underline">{{ user_resource.title }}</a>-->
+<!--                    &lt;!&ndash; Status indicator &ndash;&gt;-->
+<!--                    {% if user_resource.isPublished == True %}-->
+<!--                    <span class="px-2 py-1 text-xs bg-green-200 text-green-800 rounded-full">Published</span>-->
+<!--                    {% else %}-->
+<!--                    <span class="px-2 py-1 text-xs bg-yellow-200 text-yellow-800 rounded-full">Not Publish</span>-->
+<!--                    {% endif %}-->
+<!--                </div>-->
+<!--                &lt;!&ndash; Right side: Operations &ndash;&gt;-->
+<!--                <div class="flex items-center space-y-2 md:space-y-0 md:space-x-2">-->
+<!--                    &lt;!&ndash; Update button &ndash;&gt;-->
+<!--                    <button class="text-sm text-gray-500 hover:text-gray-700 focus:outline-none">-->
+<!--                        Update-->
+<!--                    </button>-->
+<!--                    &lt;!&ndash; Delete button (disabled if published) &ndash;&gt;-->
+<!--                    <button class="text-sm text-red-500 hover:text-red-700 focus:outline-none">-->
+<!--                        Delete-->
+<!--                    </button>-->
+<!--                    &lt;!&ndash; Publish button &ndash;&gt;-->
+<!--                    {% if user_resource.isPublished == True %}-->
+<!--                    {% else %}-->
+<!--                    <button class="text-sm text-green-500 hover:text-green-700 focus:outline-none">-->
+<!--                        Publish-->
+<!--                    </button>-->
+<!--                    {% endif %}-->
+<!--                </div>-->
+<!--            </li>-->
+<!--            {% endfor %}-->
+<!--            {% endif %}-->
+<!--            &lt;!&ndash; Add more list items here &ndash;&gt;-->
+        </ul>
+    </div>
+{% endblock %}
